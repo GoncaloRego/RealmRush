@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Turret turretPrefab;
+    [SerializeField] bool isPlaceable;
+
+    public bool IsPlaceable { get { return isPlaceable; } }
+
+    public bool GetIsPlaceable()
     {
-        
+        return isPlaceable;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnMouseDown()
     {
-        
+        if (isPlaceable == true)
+        {
+            bool isPlaced = turretPrefab.CreateTurret(turretPrefab, transform.position);
+            isPlaceable = !isPlaced;
+        }
     }
 }

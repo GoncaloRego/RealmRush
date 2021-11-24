@@ -4,14 +4,21 @@ using UnityEngine;
 using TMPro;
 
 [ExecuteAlways]
+[RequireComponent(typeof(TextMeshPro))]
 public class CoordinateSystem : MonoBehaviour
 {
+    [SerializeField] Color defaultColor = Color.white;
+    [SerializeField] Color blockedColor = Color.black;
+
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
+    Waypoint waypoint;
 
     void Awake()
     {
+        waypoint = GetComponentInParent<Waypoint>();
         label = GetComponent<TextMeshPro>();
+        label.enabled = false;
         DisplayCoordinates();
     }
 
@@ -21,7 +28,11 @@ public class CoordinateSystem : MonoBehaviour
         {
             DisplayCoordinates();
             UpdateObjectName();
+            label.enabled = true;
         }
+
+        SetLabelColor();
+        ToggleLabels();
     }
 
     void DisplayCoordinates()
@@ -34,5 +45,25 @@ public class CoordinateSystem : MonoBehaviour
     void UpdateObjectName()
     {
         transform.parent.name = coordinates.ToString();
+    }
+
+    void ToggleLabels()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            label.enabled = !label.IsActive();
+        }
+    }
+
+    void SetLabelColor()
+    {
+        if (waypoint.IsPlaceable == true)
+        {
+            label.color = defaultColor;
+        }
+        else
+        {
+            label.color = blockedColor;
+        }
     }
 }
